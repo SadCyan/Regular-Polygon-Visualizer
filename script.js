@@ -1,11 +1,11 @@
 let arr = [];
-
+//set up sliders
 var radiusLen = document.getElementById("radiusLen"),
     radiusDisplay = document.getElementById("radiusDisplay");
 
 var vertexCount = document.getElementById("vertexCount"),
     vertexDisplay = document.getElementById("vertexDisplay");
-
+//set up canvas layers
 const canvasContainer = document.getElementById("mainDiv"),
     canvasLeft = canvasContainer.offsetLeft + canvasContainer.clientLeft,
     canvasTop = canvasContainer.offsetTop + canvasContainer.clientTop;
@@ -39,18 +39,18 @@ function initialize() {
         canvasPointer.width  = displayWidth;
         canvasPointer.height = displayHeight;
     }
-
+    //draw initial guide circle
     drawBgCircle();
 
     radiusDisplay.innerHTML = (radiusLen.value/100).toFixed(2); // Display the default slider value
     vertexDisplay.innerHTML = vertexCount.value; // Display the default slider value
-    
+    //draw initial polygon
     createPolygon(vertexCount.value);
     drawPolygon(arr);
     listVertices();
 }
 
-// Update the current slider value (each time you drag the slider handle)
+// Update the 'vertices' slider value, completely changing the polygon shape
 vertexCount.oninput = function() {
     vertexDisplay.innerHTML = this.value;
     createPolygon(this.value);
@@ -58,7 +58,7 @@ vertexCount.oninput = function() {
     listVertices();
 } 
 
-// Update the current slider value (each time you drag the slider handle)
+// Update the 'scale' slider value, redraws the guide circle and polygon to fit the new scale
 radiusLen.oninput = function() {
     radiusDisplay.innerHTML = (this.value/100).toFixed(2);
     cleanCanvas(ctxBg);
@@ -69,10 +69,12 @@ radiusLen.oninput = function() {
     listVertices();
 } 
 
+//cleans the canvas context that is passed into this function
 function cleanCanvas(canv) {
     canv.clearRect(0,0,canvasPoly.scrollWidth,canvasPoly.scrollHeight);
 }
 
+//draws the guide circle, redraw on scaling changes
 function drawBgCircle() {
     ctxBg.fillStyle = "#2f2f2d";
     ctxBg.fillRect(0,0,canvasBg.scrollWidth,canvasBg.scrollHeight);
@@ -82,6 +84,7 @@ function drawBgCircle() {
     ctxBg.stroke();
 }
 
+//function unfinished at the moment, will allow for user defined vertices to be added
 canvasPoly.addEventListener("click", function (event) {
     if (vertexCount.value == vertexCount.max) {
         alert("Vertex Maximum Reached.");
@@ -91,11 +94,12 @@ canvasPoly.addEventListener("click", function (event) {
 
         var [x, y] = findClosestCirclePoint(mouseX, mouseY);
 
-        
+
 
     }
 });
 
+//creates a mouse tracking point that is contained to the guide circle
 canvasPointer.addEventListener("mousemove", function (event) {
     var mouseX = event.pageX - canvasLeft;
         mouseY = event.pageY - canvasTop;
@@ -111,6 +115,7 @@ canvasPointer.addEventListener("mousemove", function (event) {
     ctxPointer.fill();
 });
 
+//takes a coordinate position in, and outputs the point on the guide circle which is along the same ray from the circle center
 function findClosestCirclePoint(canvasX, canvasY) {
     //use canvas center as 0,0
     adjustedX = canvasX - canvasCenterX;
@@ -144,6 +149,7 @@ function findClosestCirclePoint(canvasX, canvasY) {
     return [rayX, rayY];
 }
 
+//using an angle input, outputs a point on the guide circle
 function calculatePoint(angle) {
     let angleRad = angle * Math.PI / 180
     var pointX = Math.sin(angleRad) * radiusLen.value*3,
@@ -152,6 +158,7 @@ function calculatePoint(angle) {
     return [canvasCenterX+pointX, canvasCenterY+pointY];
 }
 
+//takes number of vertices as input and creates an array of coordinates for polygon vertices in order, clockwise
 function createPolygon(vertices = 3) {
     cleanCanvas(ctx);
     arr = []
@@ -165,6 +172,7 @@ function createPolygon(vertices = 3) {
     }
 }
 
+//takes vertices array and draws the polygon to the polygon canvas
 function drawPolygon(pointList) {
     cleanCanvas(ctx);
     ctx.strokeStyle = "#BABABA";
@@ -184,13 +192,14 @@ function drawPolygon(pointList) {
     ctx.stroke();
 }
 
+//used for debugging
 function listVertices() {
     /*arr.forEach(vertex => {
         console.log(vertex);
     });*/
 }
 
-
+//potential future use for saving user defined vertices
 function storeInLocalStorage() {
     localStorage.setItem("items", JSON.stringify(arr));
 }
