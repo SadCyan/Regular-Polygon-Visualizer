@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" 
+          content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <div class="app-container" id="polygonBody">
+        <div class="menu-options">
+            <div class="option-container">
+                <label>Vertices</label>
+                <div class="slide-container">
+                    <input type="range" min="3" max="24" value="4" class="slider" id="vertexCount">
+                    <span id="vertexDisplay"></span>
+                </div>
+            </div>
+
+            <div class="option-container">
+                <label>Scale</label>
+                <div class="slide-container">
+                    <input type="range" min="10" max="100" value="50" class="slider" id="radiusLen">
+                    <span id="radiusDisplay"></span>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="canvas-div" id="mainDiv">            
+            <canvas class="background canvas" id="backgroundCanvas"></canvas>
+            <canvas class="polygon canvas" id="polygonCanvas"></canvas>
+            <canvas class="pointer canvas" id="pointerCanvas"></canvas>
+        </div>
+
+        <script src="script.js"></script>
+    </div>
+</body>
+
+</html>
